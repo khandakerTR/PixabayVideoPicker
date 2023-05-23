@@ -24,9 +24,9 @@ class ViewController: UIViewController {
     }
     var editorialDataSource = PhotosDataSourceFactory.collection.dataSource
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
        dataSource = editorialDataSource
     }
     
@@ -50,6 +50,26 @@ class ViewController: UIViewController {
     func fetchNextItems() {
         dataSource.fetchNextPage()
     }
+    
+    func makeContextMenu(with url: String) -> UIMenu {
+         let playAction = UIAction(title: "Play Video", image: UIImage(systemName: "play.fill")) { [weak self] action in
+             guard let videoURL = URL(string: url) else {
+                 return
+             }
+             self?.playVideo(url: videoURL)
+         }
+         
+         return UIMenu(title: "", children: [playAction])
+     }
+    
+    func playVideo(url: URL) {
+        let playerViewController = AVPlayerViewController()
+        let player = AVPlayer(url: url)
+        playerViewController.player = player
+        present(playerViewController, animated: true) {
+            player.play()
+        }
+    }
 }
 
 extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -67,6 +87,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("ID ",dataSource.items[indexPath.item].id)
         let videoURL = URL(string: dataSource.items[indexPath.item].videos.large.url)!
         let player = AVPlayer(url: videoURL)
         let playerViewController = AVPlayerViewController()
@@ -79,10 +100,26 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let prefetchCount = 10
         if indexPath.item == dataSource.items.count - prefetchCount {
-            print("IndexPath",indexPath.item, "dataSource.items.count",dataSource.items.count, "prefetchCount",prefetchCount)
             fetchNextItems()
         }
     }
+    
+//    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+//        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+//            return self.makeContextMenu(with: self.dataSource.items[indexPath.row].videos.tiny.url)
+//        })
+//    }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt
+        indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        let previewProvider: () -> PreviewViewController? = { [unowned self] in
+            let size = CGSize(width: self.dataSource.items[indexPath.row].videos.tiny.width, height: self.dataSource.items[indexPath.row].videos.tiny.height)
+            return PreviewViewController(url: self.dataSource.items[indexPath.row].videos.tiny.url, size: size)
+        }
+        return UIContextMenuConfiguration(previewProvider: previewProvider)
+    }
+    
 }
 
 
@@ -92,12 +129,14 @@ extension ViewController: PagedDataSourceDelegate {
     }
     
     func dataSource(_ dataSource: PagedDataSource, didFetch items: [PixabayHitModel]) {
-        guard items.count > 0 else { return }
+        guard items.count > 0 else {
+            return
+            
+        }
         guard dataSource.items.count > 0 else {
 
             return
         }
-
         let newPhotosCount = items.count
         let startIndex = self.dataSource.items.count - newPhotosCount
         let endIndex = startIndex + newPhotosCount
@@ -107,7 +146,6 @@ extension ViewController: PagedDataSourceDelegate {
         }
 
         DispatchQueue.main.async { [unowned self] in
-            print("self.dataSource.items.count",self.dataSource.items.count)
             let hasWindow = self.collectionView.window != nil
             let collectionViewItemCount = self.collectionView.numberOfItems(inSection: 0)
             if hasWindow && collectionViewItemCount < dataSource.items.count {
@@ -120,16 +158,13 @@ extension ViewController: PagedDataSourceDelegate {
     
     func dataSource(_ dataSource: PagedDataSource, fetchDidFailWithError error: Error) {
 //        let state: EmptyViewState = (error as NSError).isNoInternetConnectionError() ? .noInternetConnection : .serverError
+        print("ERROR >>>> ",error.localizedDescription)
     }
 }
 
 extension ViewController: WaterfallLayoutDelegate {
     func waterfallLayout(_ layout: WaterfallLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        print("IndexPath",dataSource.items[indexPath.item].id)
         guard let video = dataSource.item(at: indexPath.item) else { return .zero }
-        print("IMAGE WIDTH> ",video.videos.large.width, "HEIGHT ",video.videos.large.height)
         return CGSize(width: video.videos.tiny.width, height: video.videos.tiny.height)
-  
     }
-    
 }

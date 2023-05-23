@@ -46,6 +46,20 @@ class PixabayRequest: NetworkRequest {
             completeOperation()
         }
     }
+    
+    func parseJSON(_ pixabay: Data) -> [PixabayHitModel]? {
+        let decoder = JSONDecoder()
+        do {
+            let decodedData = try decoder.decode(PixabayResult.self, from: pixabay)
+            let hits = decodedData.hits
+            print("TOTAL ",hits.count)
+            return hits
+        } catch {
+            return nil
+        }
+    }
+    
+    
 }
 
 

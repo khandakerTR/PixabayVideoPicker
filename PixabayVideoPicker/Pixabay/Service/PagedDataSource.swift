@@ -7,11 +7,6 @@
 
 import UIKit
 
-protocol PagedDataSourceFactory {
-    func initialCursor() -> PixabayPagedRequest.Cursor
-    func request(with cursor: PixabayPagedRequest.Cursor) -> PixabayPagedRequest
-}
-
 protocol PagedDataSourceDelegate: AnyObject {
     func dataSourceWillStartFetching(_ dataSource: PagedDataSource)
     func dataSource(_ dataSource: PagedDataSource, didFetch items: [PixabayHitModel])
@@ -91,13 +86,11 @@ class PagedDataSource {
                 self.canFetchMore = false
             } else {
                 self.cursor = request.nextCursor()
-                print("Current Cursor",self.cursor.page)
             }
-
-            self.items.append(contentsOf: items)
-
+            let filteredItems = items.filter { ($0.videos.large.size != 0) || ($0.videos.large.url != "") }
+            self.items.append(contentsOf: filteredItems)
             self.isFetching = false
-            self.fetchDidComplete(withItems: items, error: nil)
+            self.fetchDidComplete(withItems: filteredItems, error: nil)
         }
 
         operationQueue.addOperationWithDependencies(request)
