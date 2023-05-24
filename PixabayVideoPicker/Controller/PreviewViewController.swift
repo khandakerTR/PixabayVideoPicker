@@ -28,8 +28,14 @@ class PreviewViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupNotifications()
         setupView()
         startVideo()
+    }
+    
+    func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(videoDidEnded), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
     }
     
     func setupView() {
@@ -53,5 +59,9 @@ class PreviewViewController: UIViewController {
         let height = size.height * (width / size.width)
         preferredContentSize = CGSize(width: width, height: height)
         player.play()
+    }
+    
+    @objc private func videoDidEnded() {
+        self.dismiss(animated: true)
     }
 }

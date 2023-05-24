@@ -27,7 +27,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       dataSource = editorialDataSource
+        setupNotifications()
+        dataSource = editorialDataSource
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -70,6 +71,35 @@ class ViewController: UIViewController {
             player.play()
         }
     }
+    
+    func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHideNotification(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShowNotification(_ notification: Notification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.size,
+            let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
+                return
+        }
+
+        let bottomInset = keyboardSize.height - view.safeAreaInsets.bottom
+        let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: bottomInset, right: 0.0)
+
+        UIView.animate(withDuration: duration) { [weak self] in
+            self?.collectionView.contentInset = contentInsets
+            self?.collectionView.scrollIndicatorInsets = contentInsets
+        }
+    }
+
+    @objc func keyboardWillHideNotification(_ notification: Notification) {
+        guard let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
+
+        UIView.animate(withDuration: duration) { [weak self] in
+            self?.collectionView.contentInset = .zero
+            self?.collectionView.scrollIndicatorInsets = .zero
+        }
+    }
 }
 
 extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -88,7 +118,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("ID ",dataSource.items[indexPath.item].id)
-        let videoURL = URL(string: dataSource.items[indexPath.item].videos.large.url)!
+        let videoURL = URL(string: dataSource.items[indexPath.item].videos.tiny.url)!
         let player = AVPlayer(url: videoURL)
         let playerViewController = AVPlayerViewController()
         playerViewController.player = player
@@ -166,5 +196,54 @@ extension ViewController: WaterfallLayoutDelegate {
     func waterfallLayout(_ layout: WaterfallLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         guard let video = dataSource.item(at: indexPath.item) else { return .zero }
         return CGSize(width: video.videos.tiny.width, height: video.videos.tiny.height)
+    }
+}
+
+extension ViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if searchBar.isFirstResponder {
+            searchBar.resignFirstResponder()
+        }
+    }
+}
+
+// MARK: - UISearchBarDelegate
+extension ViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        guard let text = searchBar.text else { return }
+        let escapedQuery = text.replacingOccurrences(of: " ", with: "+")
+            .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        setSearchText(escapedQuery)
+        refresh()
+        scrollToTop()
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard self.searchText != nil && searchText.isEmpty else { return }
+
+        setSearchText(nil)
+        refresh()
+        reloadData()
+        scrollToTop()
+    }
+    
+    private func setSearchText(_ text: String?) {
+        if let text = text, text.isEmpty == false {
+            dataSource = PhotosDataSourceFactory.search(query: text).dataSource
+            searchText = text
+        } else {
+            dataSource = editorialDataSource
+            searchText = nil
+        }
+    }
+    
+    private func scrollToTop() {
+        let contentOffset = CGPoint(x: 0, y: -collectionView.safeAreaInsets.top)
+        collectionView.setContentOffset(contentOffset, animated: false)
+    }
+    
+    func reloadData() {
+        collectionView.reloadData()
     }
 }

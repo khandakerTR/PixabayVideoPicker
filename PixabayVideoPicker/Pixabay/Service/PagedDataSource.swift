@@ -87,7 +87,7 @@ class PagedDataSource {
             } else {
                 self.cursor = request.nextCursor()
             }
-            let filteredItems = items.filter { ($0.videos.large.size != 0) || ($0.videos.large.url != "") }
+            let filteredItems = items.filter { ($0.videos.tiny.size != 0) && ($0.videos.tiny.url != "") }
             self.items.append(contentsOf: filteredItems)
             self.isFetching = false
             self.fetchDidComplete(withItems: filteredItems, error: nil)

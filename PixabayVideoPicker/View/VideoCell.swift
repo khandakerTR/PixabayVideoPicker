@@ -12,13 +12,13 @@ class VideoCell: UICollectionViewCell {
     @IBOutlet weak var duration: UILabel!
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var imageView: UIImageView!
-    var video: PixabayHitModel?
-    var imageId: Int?
     
+    private var video: PixabayHitModel?
+    private let previewImageURL = "https://i.vimeocdn.com/video/"
     private var currentPhotoID: Int?
     private var imageDownloader = ImageDownloader()
     
-    func setDuration(totalSec: Int) {
+    private func getDuration(totalSec: Int)-> String {
         let time = totalSec
         
         let seconds = time % 60
@@ -40,18 +40,16 @@ class VideoCell: UICollectionViewCell {
             formatString = "%2d:%0.2d:%0.2d"
             durationString = String(format: formatString,minutes,seconds)
         }
-        duration.text = durationString
+        return durationString
     }
     
     func configure(with pixabayModel: PixabayHitModel) {
-        autoreleasepool {
             self.currentPhotoID = pixabayModel.id
-            setDuration(totalSec: pixabayModel.duration)
+            self.duration.text = getDuration(totalSec: pixabayModel.duration)
             self.userName.text = pixabayModel.user
             let size = "\(pixabayModel.videos.tiny.width)x\(pixabayModel.videos.tiny.height)"
-            let url = URL(string: "https://i.vimeocdn.com/video/\(pixabayModel.pictureID)_\(size).jpg")!
+            let url = URL(string: "\(previewImageURL)\(pixabayModel.pictureID)_\(size).jpg")!
             downloadImage(with: url, and: currentPhotoID!)
-        }
     }
     
     override func prepareForReuse() {
