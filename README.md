@@ -1,7 +1,7 @@
 # PixabayVideoPicker
 
-simple iOS app to browser and preview videos from Pixabay.
-can be use as Video Picker
+simple iOS app to browser and preview videos from Pixabay. It 
+can be use as Video Picker or Pixabay Video Picker
 
 ## Overview
 
