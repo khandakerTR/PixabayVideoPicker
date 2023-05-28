@@ -27,22 +27,4 @@ struct PixabayHitModel: Codable {
         case userID = "user_id"
         case user, userImageURL
     }
-
-//    init(id: Int, pageURL: String, type: String, tags: String, duration: Int, pictureID: String, videos: PixabayVideo, views: Int, downloads: Int, likes: Int, comments: Int, userID: Int, user: String, userImageURL: String) {
-//        self.id = id
-//        print("ID ",id)
-//        self.pageURL = pageURL
-//        self.type = type
-//        self.tags = tags
-//        self.duration = duration
-//        self.pictureID = pictureID
-//        self.videos = videos
-//        self.views = views
-//        self.downloads = downloads
-//        self.likes = likes
-//        self.comments = comments
-//        self.userID = userID
-//        self.user = user
-//        self.userImageURL = userImageURL
-//    }
 }

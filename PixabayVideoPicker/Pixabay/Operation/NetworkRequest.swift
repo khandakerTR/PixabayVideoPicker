@@ -27,7 +27,7 @@ class NetworkRequest: ConcurrentOperation {
     private let baseURL = "https://pixabay.com/api/videos/"
     private let apiKey = "36438408-6e2cafe5de5e482918a197b82"
     
-    var timeoutInterval = 30.0
+    private let timeoutInterval = 30.0
 
     private var task: URLSessionDataTask?
     private var successCodes: CountableRange<Int> = 200..<299
@@ -56,8 +56,7 @@ class NetworkRequest: ConcurrentOperation {
         }
         
         requestURL.queryItems = [
-            URLQueryItem(name: "key", value: apiKey),
-            URLQueryItem(name: "safesearch", value: "false")
+            URLQueryItem(name: "key", value: apiKey)
         ]
         parameters?.forEach { key, value in
             let qry = URLQueryItem(name: key, value: "\(value)")

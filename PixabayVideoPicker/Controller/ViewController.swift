@@ -10,12 +10,17 @@ import AVKit
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var errorDescriptionView: UIView!
     @IBOutlet weak var searchBar: UISearchBar!
+    
     @IBOutlet weak var collectionView: UICollectionView! {
         didSet {
             collectionView?.collectionViewLayout = WaterfallLayout(with: self)
         }
     }
+    private let refreshControl = UIRefreshControl()
     private var searchText: String?
     var dataSource: PagedDataSource! {
         didSet {
@@ -29,6 +34,9 @@ class ViewController: UIViewController {
         
         setupNotifications()
         dataSource = editorialDataSource
+        refreshControl.addTarget(self, action: #selector(didPullToRefresh(_:)), for: .valueChanged)
+        collectionView.alwaysBounceVertical = true
+        collectionView.refreshControl = refreshControl // iOS 10+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,17 +59,6 @@ class ViewController: UIViewController {
     func fetchNextItems() {
         dataSource.fetchNextPage()
     }
-    
-    func makeContextMenu(with url: String) -> UIMenu {
-         let playAction = UIAction(title: "Play Video", image: UIImage(systemName: "play.fill")) { [weak self] action in
-             guard let videoURL = URL(string: url) else {
-                 return
-             }
-             self?.playVideo(url: videoURL)
-         }
-         
-         return UIMenu(title: "", children: [playAction])
-     }
     
     func playVideo(url: URL) {
         let playerViewController = AVPlayerViewController()
@@ -100,11 +97,31 @@ class ViewController: UIViewController {
             self?.collectionView.scrollIndicatorInsets = .zero
         }
     }
+    
+    @objc
+    private func didPullToRefresh(_ sender: Any) {
+        // Do you your api calls in here, and then asynchronously remember to stop the
+        // refreshing when you've got a result (either positive or negative)
+        refreshControl.endRefreshing()
+    }
+    
+    func showErrorView(with title: String, and description: String) {
+        DispatchQueue.main.async {
+            self.titleLabel.text = title
+            self.descriptionLabel.text = description
+            self.errorDescriptionView.isHidden = false
+        }
+    }
+    
+    func hideErrorView() {
+        errorDescriptionView.isHidden = true
+    }
 }
 
 extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
         return dataSource.items.count
     }
     
@@ -117,7 +134,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("ID ",dataSource.items[indexPath.item].id)
+        
         let videoURL = URL(string: dataSource.items[indexPath.item].videos.tiny.url)!
         let player = AVPlayer(url: videoURL)
         let playerViewController = AVPlayerViewController()
@@ -134,12 +151,6 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
         }
     }
     
-//    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-//        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
-//            return self.makeContextMenu(with: self.dataSource.items[indexPath.row].videos.tiny.url)
-//        })
-//    }
-    
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt
         indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
@@ -149,7 +160,6 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
         }
         return UIContextMenuConfiguration(previewProvider: previewProvider)
     }
-    
 }
 
 
@@ -160,6 +170,7 @@ extension ViewController: PagedDataSourceDelegate {
     
     func dataSource(_ dataSource: PagedDataSource, didFetch items: [PixabayHitModel]) {
         guard items.count > 0 else {
+            //No data found on this Search
             return
             
         }
@@ -187,8 +198,11 @@ extension ViewController: PagedDataSourceDelegate {
     }
     
     func dataSource(_ dataSource: PagedDataSource, fetchDidFailWithError error: Error) {
-//        let state: EmptyViewState = (error as NSError).isNoInternetConnectionError() ? .noInternetConnection : .serverError
-        print("ERROR >>>> ",error.localizedDescription)
+        let state: EmptyViewState = (error as NSError).isNoInternetConnectionError() ? .noInternetConnection : .serverError
+       
+            self.showErrorView(with: state.title, and: state.description)
+      
+        print("ERROR",error.localizedDescription)
     }
 }
 

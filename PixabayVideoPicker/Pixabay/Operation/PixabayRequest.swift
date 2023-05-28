@@ -52,7 +52,6 @@ class PixabayRequest: NetworkRequest {
         do {
             let decodedData = try decoder.decode(PixabayResult.self, from: pixabay)
             let hits = decodedData.hits
-            print("TOTAL ",hits.count)
             return hits
         } catch {
             return nil

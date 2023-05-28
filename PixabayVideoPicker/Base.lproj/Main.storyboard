@@ -84,6 +84,30 @@
                                     <outlet property="delegate" destination="868-Tx-Tdf" id="z2P-xS-YLd"/>
                                 </connections>
                             </searchBar>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MSU-uC-7Iz">
+                                <rect key="frame" x="0.0" y="100" width="414" height="762"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="23k-3Y-gxu">
+                                        <rect key="frame" x="177.33333333333334" y="367.33333333333331" width="59.666666666666657" height="27.666666666666686"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xul-fp-Dhf">
+                                        <rect key="frame" x="187.33333333333334" y="403" width="39.666666666666657" height="19.333333333333314"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="xul-fp-Dhf" firstAttribute="centerX" secondItem="23k-3Y-gxu" secondAttribute="centerX" id="8cq-GH-tFN"/>
+                                    <constraint firstItem="23k-3Y-gxu" firstAttribute="centerX" secondItem="MSU-uC-7Iz" secondAttribute="centerX" id="ZGb-0G-052"/>
+                                    <constraint firstItem="xul-fp-Dhf" firstAttribute="top" secondItem="23k-3Y-gxu" secondAttribute="bottom" constant="8" id="i7O-az-3FK"/>
+                                    <constraint firstItem="23k-3Y-gxu" firstAttribute="centerY" secondItem="MSU-uC-7Iz" secondAttribute="centerY" id="y9e-SQ-cPr"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="5X3-bW-F4m"/>
                         <color key="backgroundColor" red="0.086274509799999996" green="0.090196078430000007" blue="0.1019607843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -95,9 +119,13 @@
                             <constraint firstItem="B7J-aW-CkP" firstAttribute="leading" secondItem="5X3-bW-F4m" secondAttribute="leading" id="C8V-iB-7fx"/>
                             <constraint firstItem="B7J-aW-CkP" firstAttribute="trailing" secondItem="5X3-bW-F4m" secondAttribute="trailing" id="DsB-BF-jfS"/>
                             <constraint firstItem="uO1-he-a5c" firstAttribute="top" secondItem="5X3-bW-F4m" secondAttribute="top" id="GFu-43-Ek5"/>
+                            <constraint firstItem="MSU-uC-7Iz" firstAttribute="bottom" secondItem="B7J-aW-CkP" secondAttribute="bottom" id="H9b-3E-1dS"/>
                             <constraint firstItem="uO1-he-a5c" firstAttribute="leading" secondItem="5X3-bW-F4m" secondAttribute="leading" id="OlD-Nw-eYG"/>
+                            <constraint firstItem="MSU-uC-7Iz" firstAttribute="top" secondItem="B7J-aW-CkP" secondAttribute="top" id="Q2w-yX-7Pt"/>
                             <constraint firstItem="B7J-aW-CkP" firstAttribute="top" secondItem="uO1-he-a5c" secondAttribute="bottom" id="c1P-HC-YaC"/>
+                            <constraint firstItem="MSU-uC-7Iz" firstAttribute="trailing" secondItem="B7J-aW-CkP" secondAttribute="trailing" id="n1X-XD-nFk"/>
                             <constraint firstItem="5X3-bW-F4m" firstAttribute="trailing" secondItem="B7J-aW-CkP" secondAttribute="trailing" id="nc2-Kk-xyw"/>
+                            <constraint firstItem="MSU-uC-7Iz" firstAttribute="leading" secondItem="B7J-aW-CkP" secondAttribute="leading" id="nob-Wc-Noo"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rBS-qi-Wi9">
@@ -109,7 +137,10 @@
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="B7J-aW-CkP" id="kJ4-CS-weh"/>
+                        <outlet property="descriptionLabel" destination="xul-fp-Dhf" id="54Q-ny-x3g"/>
+                        <outlet property="errorDescriptionView" destination="MSU-uC-7Iz" id="nqv-Kr-yhw"/>
                         <outlet property="searchBar" destination="uO1-he-a5c" id="yQJ-bK-i8n"/>
+                        <outlet property="titleLabel" destination="23k-3Y-gxu" id="z4G-3T-w8B"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tkG-xm-6cP" sceneMemberID="firstResponder"/>
@@ -118,6 +149,9 @@
         </scene>
     </scenes>
     <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
