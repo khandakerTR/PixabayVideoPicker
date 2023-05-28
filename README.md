@@ -13,6 +13,6 @@ This demo app uses the Pixabay videos API to return videos and metadata related 
 * Where the user can preview video on main screen by context menu
 * Long Press to video playing
 
-![Screenshot](./pixabayVIdeoPicker.png)
+![Screenshot](./pixabayVIdeoPicker.png = 414x736)
 ![Screenshot](./pixabayVIdeoPicker1.png)
 
