@@ -31,7 +31,7 @@
 		1DF034462A1B9549005E4EDD /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF034452A1B9549005E4EDD /* ImageCache.swift */; };
 		1DF034482A1B9568005E4EDD /* ImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF034472A1B9568005E4EDD /* ImageDownloader.swift */; };
 		1DF0344A2A1B958C005E4EDD /* PagedDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF034492A1B958C005E4EDD /* PagedDataSource.swift */; };
-		1DF0344C2A1B95AD005E4EDD /* PhotosDataSourceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF0344B2A1B95AD005E4EDD /* PhotosDataSourceFactory.swift */; };
+		1DF0344C2A1B95AD005E4EDD /* VideosDataSourceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF0344B2A1B95AD005E4EDD /* VideosDataSourceFactory.swift */; };
 		1DF0344F2A1B968F005E4EDD /* WaterfallLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF0344E2A1B968F005E4EDD /* WaterfallLayout.swift */; };
 		1DF034522A1B9A20005E4EDD /* OperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF034512A1B9A20005E4EDD /* OperationQueue.swift */; };
 		1DF034552A1B9B2E005E4EDD /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF034542A1B9B2E005E4EDD /* VideoCell.swift */; };
@@ -83,7 +83,7 @@
 		1DF034452A1B9549005E4EDD /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		1DF034472A1B9568005E4EDD /* ImageDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloader.swift; sourceTree = "<group>"; };
 		1DF034492A1B958C005E4EDD /* PagedDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagedDataSource.swift; sourceTree = "<group>"; };
-		1DF0344B2A1B95AD005E4EDD /* PhotosDataSourceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosDataSourceFactory.swift; sourceTree = "<group>"; };
+		1DF0344B2A1B95AD005E4EDD /* VideosDataSourceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosDataSourceFactory.swift; sourceTree = "<group>"; };
 		1DF0344E2A1B968F005E4EDD /* WaterfallLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterfallLayout.swift; sourceTree = "<group>"; };
 		1DF034512A1B9A20005E4EDD /* OperationQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationQueue.swift; sourceTree = "<group>"; };
 		1DF034542A1B9B2E005E4EDD /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
@@ -203,7 +203,7 @@
 				1DF034452A1B9549005E4EDD /* ImageCache.swift */,
 				1DF034472A1B9568005E4EDD /* ImageDownloader.swift */,
 				1DF034492A1B958C005E4EDD /* PagedDataSource.swift */,
-				1DF0344B2A1B95AD005E4EDD /* PhotosDataSourceFactory.swift */,
+				1DF0344B2A1B95AD005E4EDD /* VideosDataSourceFactory.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -393,7 +393,7 @@
 				1DF034302A1B7E25005E4EDD /* PixabayVideoSize.swift in Sources */,
 				1DF0343A2A1B82FC005E4EDD /* ConcurrentOperation.swift in Sources */,
 				1DF034442A1B8E71005E4EDD /* SearchRequest.swift in Sources */,
-				1DF0344C2A1B95AD005E4EDD /* PhotosDataSourceFactory.swift in Sources */,
+				1DF0344C2A1B95AD005E4EDD /* VideosDataSourceFactory.swift in Sources */,
 				1DF033F62A1B3BD4005E4EDD /* ViewController.swift in Sources */,
 				1DF034322A1B7E25005E4EDD /* PixabayHitModel.swift in Sources */,
 				1DF033F22A1B3BD4005E4EDD /* AppDelegate.swift in Sources */,

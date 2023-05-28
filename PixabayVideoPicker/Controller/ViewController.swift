@@ -27,7 +27,7 @@ class ViewController: UIViewController {
             dataSource.delegate = self
         }
     }
-    var editorialDataSource = PhotosDataSourceFactory.collection.dataSource
+    var editorialDataSource = VideosDataSourceFactory.collection.dataSource
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -244,7 +244,7 @@ extension ViewController: UISearchBarDelegate {
     
     private func setSearchText(_ text: String?) {
         if let text = text, text.isEmpty == false {
-            dataSource = PhotosDataSourceFactory.search(query: text).dataSource
+            dataSource = VideosDataSourceFactory.search(query: text).dataSource
             searchText = text
         } else {
             dataSource = editorialDataSource

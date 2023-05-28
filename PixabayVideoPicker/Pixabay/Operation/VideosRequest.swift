@@ -28,8 +28,8 @@ class VideosRequest: PixabayPagedRequest {
     // MARK: - Process the response
 
     override func processResponseData(_ data: Data?) {
-        if let photos = parseJSON(data!) {
-            self.items = photos
+        if let videos = parseJSON(data!) {
+            self.items = videos
             completeOperation()
         }
         super.processResponseData(data)
